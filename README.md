@@ -1,6 +1,3 @@
-gracepull
----------
-
 A smarter way to extract nested JavaScript properties.
 
 ## Usage
