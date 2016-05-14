@@ -17,7 +17,7 @@ mocha.describe('gracepull', function() {
 
     mocha.it('should fail when second argument is not a function', function() {
         const firstArgument = function() { return testObj.foo; };
-        const secondArgument = 'plain default value';
+        const secondArgument = 'plain fallback value';
 
         chai.expect(function() {
             gracepull(firstArgument, secondArgument);
@@ -26,26 +26,26 @@ mocha.describe('gracepull', function() {
 
     mocha.it('should throw Error when first argument yields an error', function() {
         const firstArgument = function() { throw new URIError('Random error!') };
-        const secondArgument = function() { return 'some default value'; };
+        const secondArgument = function() { return 'some fallback value'; };
 
         chai.expect(function() {
             gracepull(firstArgument, secondArgument);
         }).to.throw(Error);
     });
 
-    mocha.it('should return default when no match is present', function() {
-        const defaultValue = 'graceful default';
+    mocha.it('should return fallback when no match is present', function() {
+        const fallbackValue = 'graceful fallback';
         const firstArgument = function() { return testObj.unknownProperty; };
-        const secondArgument = function() { return defaultValue; };
+        const secondArgument = function() { return fallbackValue; };
 
         const result = gracepull(firstArgument, secondArgument );
 
-        chai.assert.equal(result, defaultValue);
+        chai.assert.equal(result, fallbackValue);
     });
 
     mocha.it('should return value if present', function() {
         const firstArgument = function() { return testObj.foo.bar.baz; };
-        const secondArgument = function() { return defaultValue; };
+        const secondArgument = function() { return fallbackValue; };
 
         const result = gracepull(firstArgument, secondArgument);
 

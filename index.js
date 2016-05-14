@@ -1,12 +1,12 @@
-function gracepull(tentativeValueFn, defaultValueFn) {
+function gracepull(tentativeValueFn, fallbackValueFn) {
 
     validateTentativeParam(tentativeValueFn);
-    validateDefaultParam(defaultValueFn);
+    validateFallbackParam(fallbackValueFn);
 
     var value = tryPullValue(tentativeValueFn);
 
-    if (shouldReturnDefaultValue(value, defaultValueFn)) {
-        return defaultValueFn();
+    if (shouldReturnFallbackValue(value, fallbackValueFn)) {
+        return fallbackValueFn();
     } else {
         return value;
     }
@@ -17,8 +17,8 @@ function validateTentativeParam(tentativeParam) {
     }
 }
 
-function validateDefaultParam(defaultParam) {
-    if (defaultParam !== undefined && typeof defaultParam !== 'function') {
+function validateFallbackParam(fallbackParam) {
+    if (fallbackParam !== undefined && typeof fallbackParam !== 'function') {
         throw new TypeError('Argument 2 should be of type function');
     }
 }
@@ -35,8 +35,8 @@ function tryPullValue(tentativeValueFn) {
     }
 }
 
-function shouldReturnDefaultValue(value, defaultValueFn) {
-    return (value === null || value === undefined) && defaultValueFn !== undefined;
+function shouldReturnFallbackValue(value, fallbackValueFn) {
+    return (value === null || value === undefined) && fallbackValueFn !== undefined;
 }
 
 module.exports = gracepull;
