@@ -6,18 +6,25 @@ mocha.describe('gracepull', function() {
 
     const testObj = { foo: { bar: { baz: 'qux' } } };
 
+    mocha.it('should fail when number of arguments is 0', function() {
+        chai.expect(function() {
+            gracepull();
+        }).to.throw(Error);
+    });
+
+    mocha.it('should fail when number of arguments is 3', function() {
+        const firstArgument = testObj.foo;
+        const secondArgument = function() { return 'something'; };
+        const thirdArgument = 'I can haz third arg?';
+
+        chai.expect(function() {
+            gracepull(firstArgument, secondArgument, thirdArgument);
+        }).to.throw(Error);
+    });
+
     mocha.it('should fail when first argument is not a function', function() {
         const firstArgument = testObj.foo;
         const secondArgument = function() { return 'something' };
-
-        chai.expect(function() {
-            gracepull(firstArgument, secondArgument);
-        }).to.throw();
-    });
-
-    mocha.it('should fail when second argument is not a function', function() {
-        const firstArgument = function() { return testObj.foo; };
-        const secondArgument = 'plain fallback value';
 
         chai.expect(function() {
             gracepull(firstArgument, secondArgument);
@@ -33,7 +40,7 @@ mocha.describe('gracepull', function() {
         }).to.throw(Error);
     });
 
-    mocha.it('should return fallback when no match is present', function() {
+    mocha.it('should return fallback function result when no match is present', function() {
         const fallbackValue = 'graceful fallback';
         const firstArgument = function() { return testObj.unknownProperty; };
         const secondArgument = function() { return fallbackValue; };
@@ -41,6 +48,15 @@ mocha.describe('gracepull', function() {
         const result = gracepull(firstArgument, secondArgument );
 
         chai.assert.equal(result, fallbackValue);
+    });
+
+    mocha.it('should return fallback value when no match is present', function() {
+        const firstArgument = function() { return testObj.unknownProperty; };
+        const secondArgument = 'graceful fallback';
+
+        const result = gracepull(firstArgument, secondArgument);
+
+        chai.assert.equal(result, secondArgument);
     });
 
     mocha.it('should return value if present', function() {

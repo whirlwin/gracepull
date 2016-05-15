@@ -1,25 +1,34 @@
-function gracepull(tentativeValueFn, fallbackValueFn) {
+function gracepull(tentativeValueFn, fallbackValue) {
 
+    validateNumberOfArguments(arguments);
     validateTentativeParam(tentativeValueFn);
-    validateFallbackParam(fallbackValueFn);
 
     var value = tryPullValue(tentativeValueFn);
 
-    if (shouldReturnFallbackValue(value, fallbackValueFn)) {
-        return fallbackValueFn();
+    if (shouldReturnFallbackValue(value, arguments)) {
+        return handleGetFallbackValue(fallbackValue);
     } else {
         return value;
     }
 }
+
+function validateNumberOfArguments(args) {
+    if (args.length < 1 || args.length > 2) {
+        throw new Error('Function requires 1 or 2 arguments, got ' + args.length);
+    }
+}
+
 function validateTentativeParam(tentativeParam) {
     if (typeof tentativeParam !== 'function') {
         throw new TypeError('Argument 1 should be of type function');
     }
 }
 
-function validateFallbackParam(fallbackParam) {
-    if (fallbackParam !== undefined && typeof fallbackParam !== 'function') {
-        throw new TypeError('Argument 2 should be of type function');
+function handleGetFallbackValue(fallbackValue) {
+    if (typeof fallbackValue === 'function') {
+        return fallbackValue();
+    } else {
+        return fallbackValue;
     }
 }
 
@@ -35,8 +44,8 @@ function tryPullValue(tentativeValueFn) {
     }
 }
 
-function shouldReturnFallbackValue(value, fallbackValueFn) {
-    return (value === null || value === undefined) && fallbackValueFn !== undefined;
+function shouldReturnFallbackValue(value, args) {
+    return (value === null || value === undefined) && args.length === 2;
 }
 
 module.exports = gracepull;
