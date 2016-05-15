@@ -4,6 +4,18 @@ A smarter way to extract nested JavaScript properties.
 
 ## Usage
 
+### Syntax
+
+> `gracepull(extractFn, [fallback])`
+
+#### extractFn
+
+The function used to extract the property.
+
+#### fallback
+
+The fallback value to be used if the property is absent. Can either be a value or a function returning a value.
+
 ### Basic example
 
 ```javascript
