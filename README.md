@@ -40,5 +40,5 @@ var person = {
     address: {}
 };
 
-var result = gracepull(() => person.address.street.name, () => 'Default Road'); // 'Default Road'
+var result = gracepull(() => person.address.street.name, 'Default Road'); // 'Default Road'
 ```
